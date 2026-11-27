@@ -1,0 +1,325 @@
+/* =====================================================
+   БАРБЕРШОП «ДЖЕНТЛЬМЕН»: окно записи к мастеру
+   Цвета берутся из переменных вашего style.css
+   (--card, --text, --muted, --brass, --red, --line).
+   Если переменной нет, используется значение после запятой.
+   ===================================================== */
+
+   .bk-modal [hidden],
+   .bk-modal[hidden] { display: none !important; }
+   
+   /* Шаги окна не должны получать отступы, заданные для всех <section> на сайте */
+   .bk-step { padding: 0; margin: 0; }
+   
+   /* ---------- Кнопки ---------- */
+   .bk-btn {
+     display: inline-block;
+     padding: 14px 36px;
+     border: 0;
+     border-radius: 4px;
+     background: var(--red, #D9544D);
+     color: #fff;
+     font-family: var(--font-body, 'Manrope', Arial, sans-serif);
+     font-size: 17px;
+     font-weight: 700;
+     cursor: pointer;
+     transition: background .2s, transform .2s;
+   }
+   .bk-btn:hover { background: #e8645d; transform: translateY(-2px); }
+   
+   .bk-ghost {
+     padding: 14px 30px;
+     border: 1px solid var(--line, #3A332C);
+     border-radius: 4px;
+     background: transparent;
+     color: var(--text, #F2EBDD);
+     font-family: var(--font-body, 'Manrope', Arial, sans-serif);
+     font-size: 17px;
+     cursor: pointer;
+   }
+   .bk-ghost:hover { border-color: var(--brass, #C8963E); }
+   
+   .bk-btn:focus-visible, .bk-ghost:focus-visible, .bk-close:focus-visible, .bk-nav-btn:focus-visible,
+   .bk-master:focus-visible, .bk-cut:focus-visible, .bk-day:focus-visible, .bk-slot:focus-visible {
+     outline: 2px solid var(--brass, #C8963E);
+     outline-offset: 2px;
+   }
+   
+   /* Плавающая кнопка внизу справа */
+   .bk-fab {
+     position: fixed;
+     right: 24px;
+     bottom: 24px;
+     z-index: 90;
+     box-shadow: 0 8px 24px rgba(0, 0, 0, .5);
+   }
+   
+   /* ---------- Окно ---------- */
+   .bk-modal {
+     display: none;
+     position: fixed;
+     top: 0; left: 0;
+     width: 100%; height: 100%;
+     z-index: 200;
+     padding: 20px;
+     background: rgba(0, 0, 0, .72);
+     align-items: center;
+     justify-content: center;
+   }
+   .bk-modal.is-open { display: flex; }
+   
+   .bk-box {
+     position: relative;
+     width: 100%;
+     max-width: 760px;
+     max-height: 100%;
+     overflow-y: auto;
+     padding: 36px 40px 30px;
+     background: var(--card, #1F1B18);
+     border: 1px solid var(--line, #3A332C);
+     border-radius: 8px;
+     color: var(--text, #F2EBDD);
+     font-family: var(--font-body, 'Manrope', Arial, sans-serif);
+     outline: 0;
+   }
+   
+   .bk-close {
+     position: absolute;
+     top: 14px; right: 16px;
+     width: 42px; height: 42px;
+     border: 1px solid var(--line, #3A332C);
+     border-radius: 50%;
+     background: transparent;
+     color: var(--text, #F2EBDD);
+     font-size: 26px;
+     line-height: 1;
+     cursor: pointer;
+   }
+   .bk-close:hover { border-color: var(--brass, #C8963E); }
+   
+   .bk-box h2 {
+     padding-right: 50px;
+     font-family: var(--font-head, 'Playfair Display', Georgia, serif);
+     font-size: 34px;
+     font-weight: 700;
+     line-height: 1.15;
+   }
+   
+   .bk-progress { margin: 8px 0 4px; font-size: 17px; color: var(--brass, #C8963E); }
+   
+   .bk-demo {
+     margin: 0 0 20px;
+     padding: 8px 14px;
+     border: 1px solid var(--line, #3A332C);
+     border-radius: 4px;
+     font-size: 14px;
+     line-height: 1.4;
+     color: var(--muted, #A89F91);
+   }
+   
+   .bk-sub {
+     margin: 26px 0 4px;
+     font-family: var(--font-head, 'Playfair Display', Georgia, serif);
+     font-size: 24px;
+   }
+   .bk-hint { margin-bottom: 12px; font-size: 15px; color: var(--muted, #A89F91); }
+   
+   /* ---------- Шаг 1: мастера ---------- */
+   .bk-masters { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+   
+   .bk-master {
+     display: flex;
+     align-items: center;
+     gap: 14px;
+     padding: 12px;
+     border: 1px solid var(--line, #3A332C);
+     border-radius: 6px;
+     background: transparent;
+     color: inherit;
+     font: inherit;
+     text-align: left;
+     cursor: pointer;
+     transition: border-color .2s, background .2s;
+   }
+   .bk-master:hover { border-color: var(--brass, #C8963E); }
+   .bk-master.is-selected { border-color: var(--brass, #C8963E); background: rgba(200, 150, 62, .12); }
+   
+   .bk-master__photo {
+     position: relative;
+     flex: 0 0 64px;
+     width: 64px; height: 80px;
+     overflow: hidden;
+
+   border: 1px solid var(--brass, #C8963E);
+     background: #14110F;
+   }
+   .bk-master__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+   .bk-master__any {
+     display: block;
+     height: 100%;
+     font-size: 30px;
+     line-height: 80px;
+     text-align: center;
+     color: var(--brass, #C8963E);
+   }
+   .bk-master__text { display: flex; flex-direction: column; font-size: 14px; color: var(--muted, #A89F91); line-height: 1.35; }
+   .bk-master__text strong { font-size: 19px; color: var(--text, #F2EBDD); }
+   
+   .bk-master:last-child { grid-column: 1 / -1; }
+   
+   /* ---------- Шаг 2: услуги и причёски ---------- */
+   .bk-svc { display: block; position: relative; margin-bottom: 8px; cursor: pointer; }
+   .bk-svc input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+   
+   .bk-svc__body {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding: 12px 16px;
+     border: 1px solid var(--line, #3A332C);
+     border-radius: 6px;
+     font-size: 17px;
+     line-height: 1.3;
+     transition: border-color .2s, background .2s;
+   }
+   .bk-svc__meta { margin-left: 14px; white-space: nowrap; font-size: 15px; color: var(--brass, #C8963E); text-align: right; }
+   .bk-svc:hover .bk-svc__body { border-color: var(--brass, #C8963E); }
+   .bk-svc input:checked + .bk-svc__body { border-color: var(--brass, #C8963E); background: rgba(200, 150, 62, .14); }
+   .bk-svc input:focus-visible + .bk-svc__body { outline: 2px solid var(--brass, #C8963E); outline-offset: 2px; }
+   
+   .bk-sum { margin-top: 12px; font-size: 18px; color: var(--brass, #C8963E); }
+   
+   .bk-cut-group { margin: 16px 0 8px; font-size: 15px; font-weight: 700; color: var(--muted, #A89F91); }
+   .bk-cuts { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+   
+   .bk-cut {
+     padding: 0;
+     border: 1px solid var(--line, #3A332C);
+     border-radius: 6px;
+     background: transparent;
+     color: inherit;
+     font: inherit;
+     cursor: pointer;
+     overflow: hidden;
+     transition: border-color .2s, box-shadow .2s;
+   }
+   .bk-cut:hover { border-color: var(--brass, #C8963E); }
+   .bk-cut.is-selected { border-color: var(--brass, #C8963E); box-shadow: 0 0 14px rgba(200, 150, 62, .45); }
+   .bk-cut__photo { display: block; position: relative; padding-top: 125%; background: #14110F; }
+   .bk-cut__photo img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+   .bk-cut__name { display: block; padding: 6px 2px; font-size: 13px; line-height: 1.2; }
+   
+   /* ---------- Шаг 3: календарь ---------- */
+   .bk-cal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+   .bk-month { font-family: var(--font-head, 'Playfair Display', Georgia, serif); font-size: 26px; }
+   
+   .bk-nav-btn {
+     width: 44px; height: 44px;
+     border: 1px solid var(--line, #3A332C);
+     border-radius: 50%;
+     background: transparent;
+     color: var(--text, #F2EBDD);
+     font-size: 26px;
+     line-height: 1;
+     cursor: pointer;
+   }
+   .bk-nav-btn:hover:not(:disabled) { border-color: var(--brass, #C8963E); }
+   .bk-nav-btn:disabled { opacity: .3; cursor: default; }
+   
+   .bk-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+   .bk-dow { padding: 4px 0; text-align: center; font-size: 14px; color: var(--muted, #A89F91); }
+   
+   .bk-day {
+     height: 50px;
+     border: 1px solid var(--brass, #C8963E);
+     border-radius: 6px;
+     background: transparent;
+     color: var(--text, #F2EBDD);
+     font: inherit;
+     font-size: 17px;
+     cursor: pointer;
+     transition: background .15s;
+   }
+   .bk-day.is-free:hover { background: rgba(200, 150, 62, .2); }
+   .bk-day.is-selected { background: var(--brass, #C8963E); color: #14110F; font-weight: 700; }
+   .bk-day.is-busy { border-color: #6B2D2A; background: #3A1F1D; color: #D79A96; cursor: not-allowed; }
+   .bk-day.is-off,
+   .bk-day.is-past { border-color: var(--line, #3A332C); background: transparent; color: #5E564C; cursor: default; }
+   .bk-day.is-off { text-decoration: line-through; }
+   
+   .bk-legend { list-style: none; margin-top: 16px; font-size: 15px; line-height: 1.9; color: var(--muted, #A89F91); }
+
+   .bk-dot { display: inline-block; width: 16px; height: 16px; margin-right: 10px; border-radius: 4px; border: 1px solid var(--brass, #C8963E); vertical-align: -3px; }
+   .bk-dot--busy { background: #3A1F1D; border-color: #6B2D2A; }
+   .bk-dot--off  { border-color: var(--line, #3A332C); }
+   .bk-dot--sel  { background: var(--brass, #C8963E); }
+   
+   /* ---------- Шаг 4: время ---------- */
+   .bk-slot-date { margin-bottom: 14px; font-size: 19px; }
+   .bk-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 10px; }
+   
+   .bk-slot {
+     padding: 12px 0;
+     border: 1px solid var(--brass, #C8963E);
+     border-radius: 6px;
+     background: transparent;
+     color: var(--text, #F2EBDD);
+     font: inherit;
+     font-size: 17px;
+     cursor: pointer;
+   }
+   .bk-slot:hover:not(:disabled) { background: rgba(200, 150, 62, .2); }
+   .bk-slot:disabled { border-color: var(--line, #3A332C); color: #5E564C; text-decoration: line-through; cursor: not-allowed; }
+   .bk-slot.is-selected { background: var(--brass, #C8963E); color: #14110F; font-weight: 700; }
+   .bk-empty { margin-top: 14px; font-size: 16px; color: #E4574F; }
+   
+   /* ---------- Шаг 5: контакты ---------- */
+   .bk-summary {
+     margin-bottom: 18px;
+     padding: 14px 18px;
+     border: 1px solid var(--line, #3A332C);
+     border-radius: 6px;
+     font-size: 16px;
+     line-height: 1.65;
+   }
+   
+   .bk-field { display: block; margin-bottom: 16px; font-size: 16px; }
+   .bk-field input, .bk-field textarea {
+     display: block;
+     width: 100%;
+     margin-top: 6px;
+     padding: 12px 14px;
+     border: 1px solid var(--line, #3A332C);
+     border-radius: 6px;
+     background: #14110F;
+     color: var(--text, #F2EBDD);
+     font: inherit;
+     font-size: 17px;
+   }
+   .bk-field input:focus, .bk-field textarea:focus { outline: 0; border-color: var(--brass, #C8963E); }
+   
+   /* ---------- Готово ---------- */
+   .bk-done { text-align: center; }
+   .bk-done:focus { outline: 0; }
+   .bk-done h3 { margin-bottom: 14px; font-family: var(--font-head, 'Playfair Display', Georgia, serif); font-size: 26px; color: var(--brass, #C8963E); }
+   .bk-done p { margin-bottom: 8px; font-size: 17px; line-height: 1.5; }
+   .bk-done .bk-demo { margin-top: 16px; text-align: left; }
+   
+   /* ---------- Ошибка и кнопки ---------- */
+   .bk-err { min-height: 1.4em; margin-top: 12px; font-size: 15px; color: #E4574F; }
+   .bk-actions { display: flex; justify-content: space-between; margin-top: 6px; }
+   
+   /* ---------- Телефон ---------- */
+   @media (max-width: 800px) {
+     .bk-fab { right: 14px; bottom: 14px; padding: 13px 26px; }
+     .bk-modal { padding: 8px; }
+     .bk-box { padding: 26px 16px 20px; }
+     .bk-box h2 { font-size: 26px; }
+     .bk-masters { grid-template-columns: 1fr; }
+     .bk-svc__body { font-size: 15px; padding: 10px 12px; }
+     .bk-svc__meta { font-size: 13px; }
+     .bk-cuts { grid-template-columns: repeat(3, 1fr); }
+     .bk-day { height: 42px; font-size: 16px; }
+     .bk-month { font-size: 22px; }
+     .bk-slots { grid-template-columns: repeat(3, 1fr); }
+   }
